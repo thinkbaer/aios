@@ -13,6 +13,7 @@ Argument |  Default value |  Description
 --- | --- | ---
 host | localhost | host or address for the server
 port | 8118 | port for the server
+dir | System.getProperty("user.dir") | work directory for application
 
 ### Logging
 
@@ -39,4 +40,8 @@ $ mvn exec:java -Dexec.mainClass="de.thinkbaer.aios.server.ServerMain"
 ```
 $ sh build/aios-dist/bin/aios.sh
 ```
+
+## Clients
+
+ * NodeJs - [node-aios](https://github.com/thinkbaer/node-aios)
 
