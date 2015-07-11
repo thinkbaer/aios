@@ -1,5 +1,7 @@
 package de.thinkbaer.aios.api;
 
+import io.netty.util.internal.StringUtil;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,12 +10,14 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 
 import de.undercouch.bson4jackson.BsonFactory;
 import de.undercouch.bson4jackson.BsonModule;
@@ -23,6 +27,8 @@ public class Utils {
 	private static ObjectMapper DEFALUT_JSON_MAPPER;
 
 	private static ObjectMapper DEFALUT_BSON_MAPPER;
+	
+	
 
 	static {
 		DEFALUT_JSON_MAPPER = newJsonMapper();
@@ -56,6 +62,10 @@ public class Utils {
 		return mapper;
 	}
 
+	public static String localPath(String ... args){
+		return String.join(Constants.F_SEP, args);
+	}
+	
 	public static void createDir(String path) throws IOException {
 		createDir(path, false);
 	}

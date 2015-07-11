@@ -25,8 +25,8 @@ public class ServerImpl implements Server, Runnable {
 
 	private static final Logger L = LogManager.getLogger( ServerImpl.class );
 	
-	private int PORT = 8118;
-	private String HOST = "localhost";
+	private int PORT = Integer.valueOf(System.getProperty("aios.port","8118"));
+	private String HOST = System.getProperty("aios.host","localhost");
 	private Thread serverThread;
 	
 	@Inject

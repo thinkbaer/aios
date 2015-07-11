@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.thinkbaer.aios.api.Constants;
 import de.thinkbaer.aios.api.Utils;
 
 public class DriverManagerImpl implements DriverManager {
@@ -19,10 +20,10 @@ public class DriverManagerImpl implements DriverManager {
 
 	private List<String> driverClasses = new ArrayList<>();
 
-	private String envDir = System.getProperty("user.dir") + "/env/libs";
+	private String driverUploadDir = Utils.localPath(Constants.APP_DIR,"driver");
 
 	public DriverManagerImpl() throws IOException {
-		Utils.createDir(envDir);
+		Utils.createDir(driverUploadDir);
 	}
 
 	public void registerIfNotExists(String driver, String driverLocation) throws Exception {
@@ -39,8 +40,7 @@ public class DriverManagerImpl implements DriverManager {
 				if (fileName == null) {
 					throw new NullPointerException("No jar found in driver location " + driverLocation);
 				}
-				String fileJar = envDir + "/" + fileName;
-
+				String fileJar = driverUploadDir + "/" + fileName;
 
 				to = new File(fileJar);
 				if (!to.exists()) {
