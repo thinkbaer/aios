@@ -2,9 +2,7 @@
 	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
-	<id>aios</id>
-	<baseDirectory>${project.basedir}/build</baseDirectory>
-	
+	<id>dist</id>
 	<formats>
 		<format>dir</format>
 	</formats>
@@ -14,7 +12,7 @@
 	<fileSets>
 		<fileSet>
 			<directory>${project.basedir}</directory>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>			
 			<includes>
 				<include>README.md</include>
 				<include>LICENSE.txt</include>
@@ -24,10 +22,11 @@
 
 
 		<fileSet>
-			<directory>${project.basedir}/src/assembly</directory>
-			<outputDirectory>/</outputDirectory>
+			<directory>${project.basedir}/src/assembly</directory>		
+			<outputDirectory></outputDirectory>	
 			<includes>
 				<include>bin/*</include>
+				<include>log4j2.xml</include>
 			</includes>
 			<useDefaultExcludes>true</useDefaultExcludes>
 		</fileSet>
