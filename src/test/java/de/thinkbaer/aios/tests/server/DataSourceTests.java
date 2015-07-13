@@ -19,6 +19,7 @@ import org.junit.rules.TestName;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -80,10 +81,9 @@ public class DataSourceTests {
 		client.close();
 	}
 
-	
-	
+		
 	@Test
-	public void queryDataSource() throws InterruptedException, ExecutionException, JsonProcessingException, AiosException {
+	public void simpleQueryDataSource() throws InterruptedException, ExecutionException, JsonProcessingException, AiosException {
 		Client client = getClient();
 
 		// TODO return SessionImpl
@@ -114,6 +114,38 @@ public class DataSourceTests {
 		client.close();
 	}
 
+	@Test
+	public void longQueryOver1024BytesDataSource() throws InterruptedException, ExecutionException, JsonProcessingException, AiosException {
+		Client client = getClient();
+
+		// TODO return SessionImpl
+		client.connect();
+
+		DataSourceRequest dsr = new DataSourceRequest();
+		DataSourceRequestBuilder dsrh = new DataSourceRequestBuilder((ClientImpl) client, dsr);
+		JdbcDataSourceSpec desc = ds();
+		dsrh.register(desc);
+		DataSourceResponse dsres = dsrh.execute().get();
+		assertEquals(true, (dsres.getErrors() == null));
+		assertEquals(true, dsres.getDataSourceSpec().getId() != null);
+		
+		DataSourceQueryRequestBuilder dsqrb = new DataSourceQueryRequestBuilder((ClientImpl) client);
+		SelectQueryImpl query = dsqrb.dsn(desc.getName()).query(SelectQueryImpl.class);
+		String longCond = Strings.repeat(" OR id = 1", 1000);
+		query.sql("SELECT * FROM car WHERE id = 1 " + longCond);
+
+		DataSourceQueryResponse qResponse = dsqrb.execute().get();
+		
+		
+		String out = om.writeValueAsString(qResponse);
+		L.debug(out + " [size:"+out.length()+"]");
+
+		
+		assertEquals(true, (qResponse.getErrors() == null));
+		
+		assertEquals(true, dsres.getDataSourceSpec().getId() != null);
+		client.close();
+	}
 	
 	private static JdbcDataSourceSpec ds(){
 		JdbcDataSourceSpec desc = new JdbcDataSourceSpec();

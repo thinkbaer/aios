@@ -17,6 +17,7 @@ public class ServerInitializer extends AbstractChannelInitializer {
 		ChannelPipeline pipeline = ch.pipeline();		
 		addLogger(pipeline, ServerImpl.class);
 		addExchangeCodec(pipeline);
+				
 		pipeline.addLast(provider.get());		
 	}
 

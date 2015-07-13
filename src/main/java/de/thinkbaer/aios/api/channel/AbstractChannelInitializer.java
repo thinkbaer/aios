@@ -39,6 +39,7 @@ public abstract class AbstractChannelInitializer extends ChannelInitializer<Sock
 		
 	public void addExchangeCodec(ChannelPipeline pipeline) throws Exception {		
 
+		pipeline.addLast(new LengthFieldBasedFrameDecoder(maxBytes, 0, 4, 4, 0));
 	    pipeline.addLast("bytesDecoder", newExchangeDecoder());
 	    pipeline.addLast("bytesEncoder", newExchangeEncoder());
 	    //pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
