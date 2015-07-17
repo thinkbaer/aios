@@ -8,6 +8,8 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import java.util.Calendar;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -106,10 +108,11 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 				case Types.DATE:
 					java.sql.Date ts2 = resultSet.getDate(i);
 					if (ts2 != null) {
-						Date d = new Date(ts2.getTime());
-						// Calendar start1 = Calendar.getInstance();
-						// start1.setTime(ts2);
-						put(columnName, d);
+					    //Date d = new Date(ts2.getTime());
+					    //	Calendar cal = Calendar.getInstance();
+					    //	cal.setTime(ts2);
+					    //	cal.set(Calendar.MILLISECOND, 0);
+					    put(columnName, buildDate(ts2.getTime()));
 					} else {
 						put(columnName, null);
 					}
@@ -135,10 +138,10 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 				case Types.TIMESTAMP:
 					Timestamp ts = resultSet.getTimestamp(i);
 					if (ts != null) {
-						Date d = new Date(ts.getTime());
+					    // Date d = new Date(ts.getTime());
 						// Calendar start = Calendar.getInstance();
 						// start.setTime(ts);
-						put(columnName, d);
+						put(columnName, buildDate(ts.getTime()));
 					} else {
 						put(columnName, null);
 					}
@@ -223,6 +226,14 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 			throw e;
 		}
 	}
+
+    public static Date buildDate(long date){
+	Date d = new Date(date);
+	Calendar cal = Calendar.getInstance();
+	cal.setTime(d);
+	cal.set(Calendar.MILLISECOND, 0);
+	return cal.getTime();
+    }
 
 	@Override
 	public Object get(Object key) {
