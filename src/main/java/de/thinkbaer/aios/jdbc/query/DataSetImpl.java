@@ -1,13 +1,13 @@
 package de.thinkbaer.aios.jdbc.query;
 
-import java.sql.Date;
+
 import java.sql.ResultSet;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-
 import java.util.Calendar;
 
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +22,6 @@ import de.thinkbaer.aios.api.exception.Todo;
 import de.thinkbaer.aios.jdbc.ConnectionImpl;
 
 public class DataSetImpl extends LinkedHashMap<String, Object> {
-	
 
 	/**
 	 * 
@@ -30,14 +29,14 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 	private static final long serialVersionUID = 7896880151014783925L;
 
 	private static final Logger L = LogManager.getLogger(DataSetImpl.class);
-	
+
 	public static SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 
 	@JsonIgnore
 	private HashMap<Integer, String> colMap = new HashMap<>();
 
 	public DataSetImpl() {
-	
+
 	}
 
 	public DataSetImpl(ResultSet set) throws Exception {
@@ -50,12 +49,12 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 			int columnsize = resultSet.getMetaData().getColumnCount();
 			// L.info("=== Column " + columnsize);
 			for (int i = 1; i <= columnsize; i++) {
-				String columnName = resultSet.getMetaData().getColumnName(i);				
+				String columnName = resultSet.getMetaData().getColumnName(i);
 				if (colMap.containsValue(columnName)) {
 					String tableName = resultSet.getMetaData().getTableName(i);
 					String newColumnName = tableName + "_" + columnName;
-					L.warn("column value " + columnName
-							+ " already exists, renaming to "+newColumnName+" (this can happen on join queries without aliasing)");
+					L.warn("column value " + columnName + " already exists, renaming to " + newColumnName
+							+ " (this can happen on join queries without aliasing)");
 					columnName = newColumnName;
 				}
 				colMap.put(i, columnName);
@@ -108,11 +107,11 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 				case Types.DATE:
 					java.sql.Date ts2 = resultSet.getDate(i);
 					if (ts2 != null) {
-					    //Date d = new Date(ts2.getTime());
-					    //	Calendar cal = Calendar.getInstance();
-					    //	cal.setTime(ts2);
-					    //	cal.set(Calendar.MILLISECOND, 0);
-					    put(columnName, buildDate(ts2.getTime()));
+						// Date d = new Date(ts2.getTime());
+						// Calendar cal = Calendar.getInstance();
+						// cal.setTime(ts2);
+						// cal.set(Calendar.MILLISECOND, 0);
+						put(columnName, buildDate(ts2.getTime()));
 					} else {
 						put(columnName, null);
 					}
@@ -121,7 +120,7 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 					Time ts3 = resultSet.getTime(i);
 					if (ts3 != null) {
 
-						Date d = new Date(ts3.getTime());
+						Date d = buildDate(ts3.getTime());
 						String _time = time.format(d);
 						/*
 						 * // Calendar start3 = Calendar.getInstance(); //
@@ -138,7 +137,7 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 				case Types.TIMESTAMP:
 					Timestamp ts = resultSet.getTimestamp(i);
 					if (ts != null) {
-					    // Date d = new Date(ts.getTime());
+						// Date d = new Date(ts.getTime());
 						// Calendar start = Calendar.getInstance();
 						// start.setTime(ts);
 						put(columnName, buildDate(ts.getTime()));
@@ -227,13 +226,13 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 		}
 	}
 
-    public static Date buildDate(long date){
-	Date d = new Date(date);
-	Calendar cal = Calendar.getInstance();
-	cal.setTime(d);
-	cal.set(Calendar.MILLISECOND, 0);
-	return cal.getTime();
-    }
+	public static Date buildDate(long date) {
+		Date d = new Date(date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(d);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
 
 	@Override
 	public Object get(Object key) {
