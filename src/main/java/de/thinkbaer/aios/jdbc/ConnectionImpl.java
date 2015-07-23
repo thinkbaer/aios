@@ -36,8 +36,9 @@ public class ConnectionImpl implements Connection {
 	@Override
 	public boolean open() throws AiosException {
 		try {
-			currentConnection = dataSource.getPool().getConnection();
-		} catch (SQLException e) {
+			L.debug("DataSource open connection to " + dataSource.getDataSourceSpec());
+			currentConnection = dataSource.getPool().getConnection();			
+		} catch (Exception e) {
 			throw new AiosException(e);
 		}
 		return true;
@@ -56,8 +57,9 @@ public class ConnectionImpl implements Connection {
 
 				currentConnection.close();
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			L.throwing(e);
+			throw new AiosException(e);
 		}
 	}
 

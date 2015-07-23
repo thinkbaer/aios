@@ -52,7 +52,7 @@ public class TransportChannelInboundHandlerImpl extends SimpleChannelInboundHand
 
 	
 	protected void channelRead0(ChannelHandlerContext ctx, Transport exchange_2) throws Exception {
-		if(exchange_2 instanceof OperationRequest){
+		if(exchange_2 instanceof OperationRequest){			
 			OperationResponseHandler<?,?, ?> oph =  dispatcher.inject(ctx, (OperationRequest)exchange_2);
 			oph.execute();			
 			

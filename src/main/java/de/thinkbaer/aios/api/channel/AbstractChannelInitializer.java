@@ -7,11 +7,11 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 import javax.inject.Inject;
 
-import de.thinbaer.netty.logger.Log4j2Handler;
 import de.thinkbaer.aios.api.transport.ByteToTransportDecoder;
 import de.thinkbaer.aios.api.transport.TransportCodecFactory;
 import de.thinkbaer.aios.api.transport.TranportToByteEncoder;
 import de.thinkbaer.aios.server.ServerImpl;
+import de.thinkbaer.netty.logger.Log4j2Handler;
 
 public abstract class AbstractChannelInitializer extends ChannelInitializer<SocketChannel>{
 

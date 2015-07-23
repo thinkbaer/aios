@@ -1,4 +1,4 @@
-package de.thinbaer.netty.logger;
+package de.thinkbaer.netty.logger;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufHolder;

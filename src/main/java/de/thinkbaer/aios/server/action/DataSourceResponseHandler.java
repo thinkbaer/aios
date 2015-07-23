@@ -32,9 +32,14 @@ public class DataSourceResponseHandler extends OperationResponseHandler<DataSour
 			try {
 				DataSource dataSource = manager.register(request().getDataSourceSpec());
 				response.setDataSourceSpec(dataSource.getDataSourceSpec());
-			} catch (AiosException e) {
+			} catch (Exception e) {
 				L.throwing(e);
-				response.addError(e.asErrorMessage());
+				if(e instanceof AiosException){
+					response.addError(((AiosException)e).asErrorMessage());	
+				}else{
+					response.addError(new AiosException(e).asErrorMessage());
+				}
+				
 			}
 		}else{
 			response.addError(new ErrorMessage("Method not found"));

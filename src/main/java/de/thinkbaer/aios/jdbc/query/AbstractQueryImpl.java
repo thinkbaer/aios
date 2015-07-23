@@ -1,13 +1,9 @@
 package de.thinkbaer.aios.jdbc.query;
 
 
-import java.sql.SQLException;
 import java.sql.Statement;
 
-import de.thinkbaer.aios.api.datasource.query.Query;
 import de.thinkbaer.aios.api.datasource.query.QueryResults;
-import de.thinkbaer.aios.api.datasource.query.SearchQuery;
-import de.thinkbaer.aios.api.exception.AiosException;
 import de.thinkbaer.aios.jdbc.ConnectionImpl;
 
 public abstract class AbstractQueryImpl<X extends QueryResults, Y extends AbstractQueryImpl> {
@@ -26,7 +22,7 @@ public abstract class AbstractQueryImpl<X extends QueryResults, Y extends Abstra
 		Statement stat = null;
 		try{
 			stat = connection.getConnection().createStatement();
-		}catch(SQLException | AiosException e){
+		}catch(Exception e){
 			if(retry > 0){
 				connection.close();
 				Thread.sleep(sleep);
@@ -51,27 +47,5 @@ public abstract class AbstractQueryImpl<X extends QueryResults, Y extends Abstra
 		setSql(query);
 		return (Y) this;
 	}
-	
-	/*
-	private Statement statement;
-	
-	public X execute(Connection conn){
-		statement = conn.createStatement();
-
-		int i = statement.executeUpdate(sql);
-		if (i == -1) {
-			L.error("db error : " + sql + " " + st.getWarnings());
-		}
-		statement.close();
-	}
-	
-	public Statement statement(){
-		return statement;
-	}
-	
-	public X results() {
-		return null;
-	}
-	*/
 
 }

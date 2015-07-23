@@ -27,7 +27,6 @@ public class DataSourceQueryResponseHandler extends OperationResponseHandler<Dat
 	private DataSourceManager manager;
 
 	public void execute() {
-		// TODO create new Response through injector
 		DataSourceQueryResponse response = new DataSourceQueryResponse();
 		response.getSpec().setRid(getRequestId());
 		response.setDsn(request().getDsn());
@@ -40,9 +39,15 @@ public class DataSourceQueryResponseHandler extends OperationResponseHandler<Dat
 			QueryResults res = connection.query(request().getQuery());
 			response.setResult(res);
 			connection.close();
-		} catch (AiosException e) {
+		} catch (Exception | Error e) {
 			L.throwing(e);
-			response.addError(e.asErrorMessage());
+			
+			if(e instanceof AiosException){
+				response.addError(((AiosException)e).asErrorMessage());
+			}else{
+				response.addError(new AiosException(e).asErrorMessage());	
+			}
+			
 		}
 
 		getChannelHandler().writeAndFlush(response);		

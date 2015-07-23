@@ -1,6 +1,6 @@
 package de.thinkbaer.aios.jdbc;
 
-import java.util.Objects;
+
 
 import de.thinkbaer.aios.api.datasource.DataSourceSpec;
 
@@ -89,5 +89,10 @@ public class JdbcDataSourceSpec extends DataSourceSpec{
 		this.maxConnectionPerPartial = maxConnectionPerPartial;
 	}
 	
+	
+	public String toString(){
+		String str = "JDBCConnection data:\nname: "+getName()+"\nurl: "+getUrl()+"\nuser: "+getUser()+"\npass: "+getPassword()+"";
+		return str;
+	}
 	
 }

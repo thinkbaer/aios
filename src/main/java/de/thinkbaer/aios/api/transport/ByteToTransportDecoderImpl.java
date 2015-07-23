@@ -58,7 +58,7 @@ public class ByteToTransportDecoderImpl extends ByteToMessageDecoder implements 
 
 				L.debug("Length of head="+headerLength+" payload="+(totalLength-headerLength)+" total="+totalLength);
 				if(totalLength > 0){
-					L.debug("B2M: \n" + envelope);
+					L.debug("B2M: " + envelope);
 					out.add(ex);		
 				}else{
 					new Todo();

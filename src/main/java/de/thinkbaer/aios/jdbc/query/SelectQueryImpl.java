@@ -3,12 +3,15 @@ package de.thinkbaer.aios.jdbc.query;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.thinkbaer.aios.api.datasource.query.SearchQuery;
 import de.thinkbaer.aios.jdbc.ConnectionImpl;
 
 public class SelectQueryImpl extends AbstractQueryImpl<SelectResultsImpl,SelectQueryImpl> implements SearchQuery<SelectResultsImpl> {
 
-	
+	private static final Logger L = LogManager.getLogger(SelectQueryImpl.class);
 
 	@Override
 	public SelectResultsImpl newResultsObject() {
@@ -21,6 +24,7 @@ public class SelectQueryImpl extends AbstractQueryImpl<SelectResultsImpl,SelectQ
 		Statement stmt = null;
 		try {
 			stmt = tryAcquireStatement(conn);
+			L.debug("SQL: " + getSql());
 			ResultSet set = stmt.executeQuery(getSql());
 			while (set.next()) {
 				DataSetImpl dset = new DataSetImpl(set);

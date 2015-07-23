@@ -71,6 +71,7 @@ public class DataSourceImpl implements DataSource {
 
 	public ConnectionImpl connection() throws AiosException {
 		// TODO Manage connections
+		
 		ConnectionImpl connection = connections.get();
 		connection.initialize(this);
 		return connection;
