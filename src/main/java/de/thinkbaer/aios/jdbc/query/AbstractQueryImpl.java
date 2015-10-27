@@ -10,6 +10,7 @@ public abstract class AbstractQueryImpl<X extends QueryResults, Y extends Abstra
 
 	private String sql;
 	
+	private static final Logger L = LogManager.getLogger(AbstractQueryImpl.class);
 	
 	public abstract X execute(ConnectionImpl conn)  throws Exception;
 	
@@ -23,6 +24,8 @@ public abstract class AbstractQueryImpl<X extends QueryResults, Y extends Abstra
 			stat = connection.getConnection().createStatement();
 		}catch(Exception e){
 			if(retry > 0){
+			    L.warn("tryAcquireStatement problem: " + e.getMessage() + " Retry: " + retry);
+
 				connection.close();
 				Thread.sleep(sleep);
 				return tryAcquireStatement(connection, --retry, sleep);
