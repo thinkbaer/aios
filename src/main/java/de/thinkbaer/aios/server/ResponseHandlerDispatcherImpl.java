@@ -1,5 +1,6 @@
 package de.thinkbaer.aios.server;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class ResponseHandlerDispatcherImpl implements ResponseHandlerDispatcher 
 	}
 	
 	@Override
-	public OperationResponseHandler<?, ?, ?> inject(ChannelHandlerContext chc, OperationRequest req){
+	public OperationResponseHandler<?, ?, ?> inject(Channel chc, OperationRequest req){
 		Class<? extends OperationResponseHandler<?, ?, ?>> cls = getFor(req.getClass());
 		OperationResponseHandler<?, ?, ?> handler =  injector.getInstance(cls);
 		handler.initialize(chc,req);

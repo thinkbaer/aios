@@ -15,7 +15,7 @@ public class PingResponseHandler extends OperationResponseHandler<PingRequest, P
 		response.now();
 		response.duration(request.getTime());
 		response.getSpec().setRid(getRequestId());
-		getChannelHandler().writeAndFlush(response);		
+		getChannel().writeAndFlush(response);		
 	}
 
 	

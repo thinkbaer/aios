@@ -2,6 +2,7 @@ package de.thinkbaer.aios.server.action;
 
 
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import de.thinkbaer.aios.api.action.support.OperationRequest;
 import de.thinkbaer.aios.api.action.support.OperationResponse;
@@ -15,11 +16,11 @@ public abstract class OperationResponseHandler<Request extends OperationRequest,
 	
 	private int requestId = 0;
 
-    protected ChannelHandlerContext channelHandler;
+    protected Channel channel;
 
 
-	public void initialize(ChannelHandlerContext chc, OperationRequest req) {
-        this.channelHandler = chc;
+	public void initialize(Channel chc, OperationRequest req) {
+        this.channel = chc;
         this.request = (Request)req;
         this.setRequestId(request.getSpec().getRid());        
 	}
@@ -36,8 +37,8 @@ public abstract class OperationResponseHandler<Request extends OperationRequest,
 	}
 
 
-	public ChannelHandlerContext getChannelHandler() {
-		return channelHandler;
+	public Channel getChannel() {
+		return channel;
 	}
 
 

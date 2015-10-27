@@ -45,7 +45,7 @@ public class DataSourceResponseHandler extends OperationResponseHandler<DataSour
 			response.addError(new ErrorMessage("Method not found"));
 		}
 				
-		getChannelHandler().writeAndFlush(response);		
+		getChannel().writeAndFlush(response);		
 	}
 
 	

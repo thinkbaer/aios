@@ -14,8 +14,7 @@ public abstract class AbstractQueryImpl<X extends QueryResults, Y extends Abstra
 	public abstract X execute(ConnectionImpl conn)  throws Exception;
 	
 	public Statement tryAcquireStatement(ConnectionImpl connection) throws Exception{
-		return tryAcquireStatement(connection, 5, 100);
-		
+		return tryAcquireStatement(connection, 5, 500);		
 	}
 	
 	public Statement tryAcquireStatement(ConnectionImpl connection, int retry, int sleep) throws Exception{

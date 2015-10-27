@@ -50,7 +50,7 @@ public class DataSourceQueryResponseHandler extends OperationResponseHandler<Dat
 			
 		}
 
-		getChannelHandler().writeAndFlush(response);		
+		getChannel().writeAndFlush(response);		
 	}
 
 	
