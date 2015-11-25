@@ -5,6 +5,8 @@ import java.sql.Statement;
 
 import de.thinkbaer.aios.api.datasource.query.QueryResults;
 import de.thinkbaer.aios.jdbc.ConnectionImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class AbstractQueryImpl<X extends QueryResults, Y extends AbstractQueryImpl> {
 
