@@ -37,14 +37,16 @@ import de.thinkbaer.aios.jdbc.query.ExecuteUpdateQueryImpl;
 import de.thinkbaer.aios.jdbc.query.ExecuteUpdateResultsImpl;
 import de.thinkbaer.aios.jdbc.query.SelectQueryImpl;
 import de.thinkbaer.aios.jdbc.query.SelectResultsImpl;
+import de.thinkbaer.aios.jdbc.struct.SchemaQueryImpl;
+import de.thinkbaer.aios.jdbc.struct.SchemaResultsImpl;
 import de.thinkbaer.aios.server.CoreModule;
-import de.thinkbaer.aios.server.Server;
-import de.thinkbaer.aios.server.datasource.DataSourceManager;
-import de.thinkbaer.aios.tests.server.ConnectionTests;
 
-public class JdbcTests {
+import de.thinkbaer.aios.server.datasource.DataSourceManager;
+
+
+public class QueryTests {
 	@Rule public TestName name = new TestName();
-	private static final Logger L = LogManager.getLogger( JdbcTests.class );
+	private static final Logger L = LogManager.getLogger( QueryTests.class );
 	
 	private static Injector injector;
 	
@@ -67,6 +69,32 @@ public class JdbcTests {
 		boolean unregResult = manager.unregister(ds.getName());
 		assertEquals(true, unregResult);
 	}
+	
+	@Test
+	public void querySchema() throws AiosException, JsonProcessingException{
+		
+		// HSQLDB => {"@t":"SchemaResultsImpl","size":3,"data":[{"TABLE_SCHEM":"INFORMATION_SCHEMA","TABLE_CATALOG":"PUBLIC","IS_DEFAULT":false},{"TABLE_SCHEM":"PUBLIC","TABLE_CATALOG":"PUBLIC","IS_DEFAULT":true},{"TABLE_SCHEM":"SYSTEM_LOBS","TABLE_CATALOG":"PUBLIC","IS_DEFAULT":false}]}
+		DataSourceManager manager = injector.getInstance(DataSourceManager.class);
+		JdbcDataSourceSpec spec = getSpecFrom("hsql_t1", env.getDB());
+		
+		DataSource ds = manager.register(spec);
+		assertNotNull(ds);
+
+		SchemaQueryImpl query = new SchemaQueryImpl();
+		// query.sql("SELECT * FROM car");
+		Connection connection = ds.connection();
+		QueryResults results = connection.query(query);
+		assertNotNull(results);		
+		
+		assertEquals(true, results instanceof SchemaResultsImpl);
+		
+		SchemaResultsImpl sResults = (SchemaResultsImpl)results;
+		
+		assertEquals(true, sResults.getSchemas().size() > 0);
+		
+		L.debug(mapper.writeValueAsString(sResults));		
+	}
+	
 	
 	@Test
 	public void querySelect() throws AiosException, JsonProcessingException{

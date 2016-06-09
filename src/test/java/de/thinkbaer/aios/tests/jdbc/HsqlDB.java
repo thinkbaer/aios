@@ -1,13 +1,9 @@
 package de.thinkbaer.aios.tests.jdbc;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import de.thinkbaer.aios.jdbc.JdbcDataSourceSpec;
-import de.thinkbaer.aios.tests.CreateTestEnviroment;
 
 public class HsqlDB extends DB {
 
@@ -29,9 +25,6 @@ public class HsqlDB extends DB {
 
 	@Override
 	public void createDB(String classifier) throws Exception {
-		// TODO Auto-generated method stub
-
-		
 		Connection c = getConnection();
 		update(c, "CREATE TABLE  IF NOT EXISTS car ( id INTEGER IDENTITY, type VARCHAR(256), name VARCHAR(256))");
 		update(c, "CREATE TABLE  IF NOT EXISTS owner ( id INTEGER IDENTITY, surname VARCHAR(256), givenName VARCHAR(256))");

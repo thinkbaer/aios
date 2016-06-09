@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.thinkbaer.aios.api.Utils;
 import de.thinkbaer.aios.jdbc.JdbcDataSourceSpec;
-import de.thinkbaer.aios.tests.CreateTestEnviroment;
+
 import de.thinkbaer.aios.tests.TestUtils;
 
 public class DBTestEnviroment {
@@ -28,6 +28,7 @@ public class DBTestEnviroment {
 	static {
 		types.put("hsqldb", HsqlDB.class);
 		types.put("sqlite", SqliteDB.class);
+		//types.put("mysql", MysqlDB.class);
 	}
 
 	private DB db;

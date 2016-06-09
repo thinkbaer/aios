@@ -1,24 +1,6 @@
 package de.thinkbaer.aios.tests;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import de.thinkbaer.aios.api.Utils;
-import de.thinkbaer.aios.tests.jdbc.DB;
-
+/*
 public class CreateTestEnviroment {
 
 	private static final Logger L = LogManager.getLogger(CreateTestEnviroment.class);
@@ -109,3 +91,4 @@ public class CreateTestEnviroment {
 	}
 
 }
+*/

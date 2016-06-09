@@ -1,6 +1,7 @@
 package de.thinkbaer.aios.jdbc;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +12,7 @@ import de.thinkbaer.aios.api.datasource.query.QueryResults;
 import de.thinkbaer.aios.api.exception.AiosException;
 import de.thinkbaer.aios.api.exception.Todo;
 import de.thinkbaer.aios.jdbc.query.AbstractQueryImpl;
+
 
 public class ConnectionImpl implements Connection {
 
@@ -77,6 +79,9 @@ public class ConnectionImpl implements Connection {
 		}
 		throw new Todo();
 	}
+	
+	
+	
 
 
 	public java.sql.Connection getConnection() throws AiosException {
@@ -86,6 +91,8 @@ public class ConnectionImpl implements Connection {
 		}
 		return currentConnection;
 	}
+
+	
 
 
 }

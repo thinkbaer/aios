@@ -12,7 +12,6 @@ import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.thinkbaer.aios.tests.CreateTestEnviroment;
 import de.thinkbaer.aios.jdbc.DriverShim;
 import de.thinkbaer.aios.jdbc.JdbcDataSourceSpec;
 
@@ -114,7 +113,7 @@ public abstract class DB {
 	}
 
 	public void setTestEnvDir(String testEnvDir) {
-		this.testEnvDir = testEnvDir;
+		DB.testEnvDir = testEnvDir;
 	}
 	
 	public void update(Connection c, String sql) {
@@ -211,7 +210,7 @@ public abstract class DB {
 	}
 
 	public void setLibsDir(String libsDir) {
-		this.libsDir = libsDir;
+		DB.libsDir = libsDir;
 	}
 	
 	

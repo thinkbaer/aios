@@ -1,12 +1,9 @@
 package de.thinkbaer.aios.server.action;
 
 
-
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import de.thinkbaer.aios.api.action.support.OperationRequest;
 import de.thinkbaer.aios.api.action.support.OperationResponse;
-
 
 
 
@@ -50,9 +47,4 @@ public abstract class OperationResponseHandler<Request extends OperationRequest,
 	public void setRequestId(int requestId) {
 		this.requestId = requestId;
 	}
-
-
-    
-    
-	
 }

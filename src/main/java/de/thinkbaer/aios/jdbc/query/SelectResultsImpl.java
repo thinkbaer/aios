@@ -11,8 +11,7 @@ public class SelectResultsImpl implements QueryResults{
 	private int size;
 	
 	private List<DataSetImpl> data;
-	
-	
+		
 
 	public int getSize() {
 		return size;

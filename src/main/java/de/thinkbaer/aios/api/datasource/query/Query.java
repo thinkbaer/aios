@@ -8,6 +8,7 @@ import de.thinkbaer.aios.jdbc.query.ExecuteBatchQueryImpl;
 import de.thinkbaer.aios.jdbc.query.ExecuteQueryImpl;
 import de.thinkbaer.aios.jdbc.query.ExecuteUpdateQueryImpl;
 import de.thinkbaer.aios.jdbc.query.SelectQueryImpl;
+import de.thinkbaer.aios.jdbc.struct.SchemaQueryImpl;
 
 
 @JsonTypeInfo(  
@@ -17,6 +18,7 @@ import de.thinkbaer.aios.jdbc.query.SelectQueryImpl;
 	
 @JsonSubTypes({  
     @Type(value = SelectQueryImpl.class, name = "jdbc.q.select"),
+    @Type(value = SchemaQueryImpl.class, name = "jdbc.q.schema"),
     @Type(value = ExecuteQueryImpl.class, name = "jdbc.q.exec"),
     @Type(value = ExecuteUpdateQueryImpl.class, name = "jdbc.q.update"),
     @Type(value = ExecuteBatchQueryImpl.class, name = "jdbc.q.batch"),    

@@ -37,9 +37,9 @@ import de.thinkbaer.aios.jdbc.query.ExecuteUpdateQueryImpl;
 import de.thinkbaer.aios.jdbc.query.SelectQueryImpl;
 import de.thinkbaer.aios.server.CoreModule;
 
-public class JdbcMessageTests {
+public class MessageTests {
 	@Rule public TestName name = new TestName();
-	private static final Logger L = LogManager.getLogger( JdbcMessageTests.class );
+	private static final Logger L = LogManager.getLogger( MessageTests.class );
 	
 	private static Injector injector;
 	
