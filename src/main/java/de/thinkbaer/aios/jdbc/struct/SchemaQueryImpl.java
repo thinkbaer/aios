@@ -2,6 +2,7 @@ package de.thinkbaer.aios.jdbc.struct;
 
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ import de.thinkbaer.aios.jdbc.query.AbstractQueryImpl;
 
 public class SchemaQueryImpl extends AbstractQueryImpl<SchemaResultsImpl, SchemaQueryImpl> implements Query<SchemaResultsImpl> {
 
-//	private static final Logger L = LogManager.getLogger(SchemaQueryImpl.class);
+	private static final Logger L = LogManager.getLogger(SchemaQueryImpl.class);
 
 	
 	@Override
@@ -31,12 +32,15 @@ public class SchemaQueryImpl extends AbstractQueryImpl<SchemaResultsImpl, Schema
 			
 			ResultSet rsSchema = databaseMetaData.getSchemas();			
 			while(rsSchema.next()){
+				// L.info(rsSchema."");
 				String cat = rsSchema.getString("TABLE_CATALOG");
-				String schem = rsSchema.getString("TABLE_SCHEM");
-				
-				// boolean isDefault = rsSchema.getBoolean("IS_DEFAULT");
+				String schem = rsSchema.getString("TABLE_SCHEM");				
+				boolean isDefault = true;
+				try {
+					isDefault = rsSchema.getBoolean("IS_DEFAULT");
+				}catch(SQLException e){}
 						
-				results.addSchema(cat, schem);
+				results.addSchema(cat, schem,isDefault);
 			}
 			
 		} catch (Exception e) {

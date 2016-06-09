@@ -6,7 +6,7 @@ public class CatalogSchema {
 	
 	private String schema;
 	
-	// private boolean isDefault;
+	private boolean isDefault;
 
 	public String getCatalog() {
 		return catalog;
@@ -24,7 +24,6 @@ public class CatalogSchema {
 		this.schema = schema;
 	}
 
-	/*
 	public boolean isDefault() {
 		return isDefault;
 	}
@@ -32,8 +31,6 @@ public class CatalogSchema {
 	public void setDefault(boolean isDefault) {
 		this.isDefault = isDefault;
 	}
-	*/
-
 	
 	
 }

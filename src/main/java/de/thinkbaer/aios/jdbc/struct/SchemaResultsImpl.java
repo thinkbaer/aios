@@ -39,11 +39,11 @@ public class SchemaResultsImpl implements QueryResults{
 		}
 	}
 	
-	public void addSchema(String catalog, String schema){
+	public void addSchema(String catalog, String schema, boolean isDefault){
 		CatalogSchema catalogSchema = new CatalogSchema();
 		catalogSchema.setCatalog(catalog);
 		catalogSchema.setSchema(schema);
-		// catalogSchema.setDefault(isDefault);
+		catalogSchema.setDefault(isDefault);
 		schemas.add(catalogSchema);
 	}
 		
