@@ -4,6 +4,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.thinkbaer.aios.api.datasource.query.Query;
 import de.thinkbaer.aios.api.exception.AiosException;
 import de.thinkbaer.aios.jdbc.ConnectionImpl;
@@ -13,6 +16,7 @@ import de.thinkbaer.aios.jdbc.query.AbstractQueryImpl;
 public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQueryImpl>
 		implements Query<TableResultsImpl> {
 
+	private static final Logger L = LogManager.getLogger(TableQueryImpl.class);
 	// private static final Logger L =
 	// LogManager.getLogger(SchemaQueryImpl.class);
 
@@ -38,6 +42,10 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 		} else {
 
 		}
+		boolean attachKeys = skipKeys;
+		 if(!attachKeys && getTable() != null){
+			 attachKeys = true;
+		 }
 
 		try {
 			DatabaseMetaData databaseMetaData = conn.getConnection().getMetaData();
@@ -62,7 +70,7 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 				t.setType(typeSchem);
 			}
 
-			if (!skipKeys && getTable() != null) {
+			if (attachKeys) {
 				
 				ResultSet rsColumns = databaseMetaData.getColumns(getCatalog(), getSchema(), getTable(), getColumn());
 				while (rsColumns.next()) {
@@ -95,7 +103,13 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 						String oScopeTable = rsColumns.getString("SCOPE_TABLE");
 						short oSourceDataType = rsColumns.getShort("SOURCE_DATA_TYPE");
 						String oIsAutoincrement = rsColumns.getString("IS_AUTOINCREMENT");
-						String oIsGeneratedcolumn = rsColumns.getString("IS_GENERATEDCOLUMN");
+						
+						try{
+							String oIsGeneratedcolumn = rsColumns.getString("IS_GENERATEDCOLUMN");	
+						}catch(SQLException e){
+							L.error("SQL Exception",e);
+						}
+						
 						
 						c.setTypeCode(oDataType);
 						c.setType(SqlDataType.forCode(oDataType).name());						
