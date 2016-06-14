@@ -33,8 +33,8 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 
 		TableResultsImpl results = new TableResultsImpl();
 
-		if (schema == null) {
-			throw new AiosException("Schema is not set");
+		if (catalog == null) {
+			throw new AiosException("Catalog is not set");
 		} else {
 
 		}
