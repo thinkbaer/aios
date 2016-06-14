@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class AbstractQueryImpl<X extends QueryResults, Y extends AbstractQueryImpl> {
 
-	private String sql;
+	// private String sql;
 	
 	private static final Logger L = LogManager.getLogger(AbstractQueryImpl.class);
 	
@@ -39,17 +39,5 @@ public abstract class AbstractQueryImpl<X extends QueryResults, Y extends Abstra
 		
 	}
 
-	public String getSql() {
-		return sql;
-	}
-
-	public void setSql(String sql) {
-		this.sql = sql;
-	}
-	
-	public Y sql(String query){
-		setSql(query);
-		return (Y) this;
-	}
 
 }

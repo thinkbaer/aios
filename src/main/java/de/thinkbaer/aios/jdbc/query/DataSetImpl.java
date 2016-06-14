@@ -145,6 +145,23 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 						put(columnName, null);
 					}
 					break;
+					// TODO: New Types in JDBC 4.2
+					// - TIMESTAMP_WITH_TIMEZONE
+					// - TIME_WITH_TIMEZONE
+					// - REF_CURSOR
+					/*
+				case Types.TIMESTAMP_WITH_TIMEZONE:
+					Timestamp ts = resultSet.getTimestamp(i);
+					if (ts != null) {
+						// Date d = new Date(ts.getTime());
+						// Calendar start = Calendar.getInstance();
+						// start.setTime(ts);
+						put(columnName, buildDate(ts.getTime()));
+					} else {
+						put(columnName, null);
+					}
+					break;
+					*/
 				case Types.BINARY:
 					// throw new Todo(columnName +":BINARY");
 					// break;

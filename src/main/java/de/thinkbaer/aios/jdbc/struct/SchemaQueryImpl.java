@@ -3,26 +3,29 @@ package de.thinkbaer.aios.jdbc.struct;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 
 import de.thinkbaer.aios.api.datasource.query.Query;
-import de.thinkbaer.aios.api.datasource.query.SearchQuery;
 import de.thinkbaer.aios.jdbc.ConnectionImpl;
 import de.thinkbaer.aios.jdbc.query.AbstractQueryImpl;
 
 
 public class SchemaQueryImpl extends AbstractQueryImpl<SchemaResultsImpl, SchemaQueryImpl> implements Query<SchemaResultsImpl> {
 
-	private static final Logger L = LogManager.getLogger(SchemaQueryImpl.class);
+//	private static final Logger L = LogManager.getLogger(SchemaQueryImpl.class);
 
+	
+	private String schema = null;
+	
+	// synonym database!
+	// TODO filter !!
+	private String catalog = null;
 	
 	@Override
 	public SchemaResultsImpl execute(ConnectionImpl conn) throws Exception {
 		SchemaResultsImpl results = new SchemaResultsImpl();
+						
+		
 		try {
 			DatabaseMetaData databaseMetaData = conn.getConnection().getMetaData();
 			ResultSet rsCatalog = databaseMetaData.getCatalogs();
@@ -48,11 +51,39 @@ public class SchemaQueryImpl extends AbstractQueryImpl<SchemaResultsImpl, Schema
 		}
 		return results;
 	}
+	
+	
+	
 
 
 	@Override
 	public SchemaResultsImpl newResultsObject() {
 		return new SchemaResultsImpl();
+	}
+
+
+	public String schema(String schema) {
+		this.schema = schema.toUpperCase();
+		return this.schema;
+	}
+
+	public String getSchema() {
+		return schema;
+	}
+
+
+	public void setSchema(String schema) {
+		this.schema = schema;
+	}
+
+
+	public String getCatalog() {
+		return catalog;
+	}
+
+
+	public void setCatalog(String catalog) {
+		this.catalog = catalog;
 	}
 
 

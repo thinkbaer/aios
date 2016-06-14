@@ -6,7 +6,7 @@ import java.sql.Statement;
 import de.thinkbaer.aios.api.datasource.query.ModifyQuery;
 import de.thinkbaer.aios.jdbc.ConnectionImpl;
 
-public class ExecuteQueryImpl extends AbstractQueryImpl<ExecuteResultsImpl,ExecuteQueryImpl> implements ModifyQuery<ExecuteResultsImpl>{
+public class ExecuteQueryImpl extends AbstractSqlQueryImpl<ExecuteResultsImpl,ExecuteQueryImpl> implements ModifyQuery<ExecuteResultsImpl>{
 
 	@Override
 	public ExecuteResultsImpl newResultsObject() {

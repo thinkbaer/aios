@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import de.thinkbaer.aios.api.datasource.query.SearchQuery;
 import de.thinkbaer.aios.jdbc.ConnectionImpl;
 
-public class SelectQueryImpl extends AbstractQueryImpl<SelectResultsImpl,SelectQueryImpl> implements SearchQuery<SelectResultsImpl> {
+public class SelectQueryImpl extends AbstractSqlQueryImpl<SelectResultsImpl,SelectQueryImpl> implements SearchQuery<SelectResultsImpl> {
 
 	private static final Logger L = LogManager.getLogger(SelectQueryImpl.class);
 
