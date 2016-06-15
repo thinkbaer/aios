@@ -67,9 +67,18 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 				Table t = results.addTable(tableName);
 				t.setCatalog(catalogName);
 				t.setSchema(schemaName);
-				t.setType(typeSchem);
+				t.setType(tableType);
+				
+				t.getProperties().put("TABLE_TYPE", tableType);
+				t.getProperties().put("REMARKS", remarks);
+				t.getProperties().put("TYPE_CAT", typeCat);
+				t.getProperties().put("TYPE_SCHEM", typeSchem);
+				t.getProperties().put("TYPE_NAME", typeName);
+				t.getProperties().put("SELF_REFERENCING_COL_NAME", selfRefColName);
+				t.getProperties().put("REF_GENERATION", refGeneration);
 			}
 
+			
 			if (attachKeys) {
 				
 				ResultSet rsColumns = databaseMetaData.getColumns(getCatalog(), getSchema(), getTable(), getColumn());
@@ -85,12 +94,14 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 					if(!t.hasColumn(columnName)){
 						Column c = t.addColumn(columnName);
 												
-						int oDataType = rsColumns.getInt("DATA_TYPE");												
+						int oDataType = rsColumns.getInt("DATA_TYPE");
+						c.setType(SqlDataType.forCode(oDataType).name());
+						
 						String oTypeName = rsColumns.getString("TYPE_NAME");					
 						int oColumnSize = rsColumns.getInt("COLUMN_SIZE");
 						int oDecimalDigits = rsColumns.getInt("DECIMAL_DIGITS");
 						int oNumPrecRadix = rsColumns.getInt("NUM_PREC_RADIX");
-						int oNnullable = rsColumns.getInt("NULLABLE");
+						int oNullable = rsColumns.getInt("NULLABLE");
 						String oRemarks = rsColumns.getString("REMARKS");
 						String oColumnDef = rsColumns.getString("COLUMN_DEF");
 						int oSqlDataType = rsColumns.getInt("SQL_DATA_TYPE"); // unused
@@ -104,15 +115,39 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 						short oSourceDataType = rsColumns.getShort("SOURCE_DATA_TYPE");
 						String oIsAutoincrement = rsColumns.getString("IS_AUTOINCREMENT");
 						
+						if(oTypeName == "SERIAL"){
+							c.isPrimary(true);
+						}
+
+						c.getProperties().put("DATA_TYPE", oTypeName);
+						c.getProperties().put("COLUMN_SIZE", oColumnSize);
+						c.getProperties().put("DECIMAL_DIGITS", oDecimalDigits);
+						c.getProperties().put("NUM_PREC_RADIX", oNumPrecRadix);
+						c.getProperties().put("NULLABLE", oNullable);
+						c.getProperties().put("REMARKS", oRemarks);
+						c.getProperties().put("COLUMN_DEF", oColumnDef);
+						c.getProperties().put("SQL_DATA_TYPE", oSqlDataType);
+						c.getProperties().put("SQL_DATETIME_SUB", oSqlDataTypeSub);
+						c.getProperties().put("CHAR_OCTET_LENGTH", oCharOctetLength);
+						c.getProperties().put("ORDINAL_POSITION", oOrdinalPosition);
+						c.getProperties().put("IS_NULLABLE", oIsNullable);
+						c.getProperties().put("SCOPE_CATALOG", oScopeCatalog);
+						c.getProperties().put("SCOPE_SCHEMA", oScopeSchema);
+						c.getProperties().put("SCOPE_TABLE", oScopeTable);
+						c.getProperties().put("SOURCE_DATA_TYPE", oSourceDataType);
+						c.getProperties().put("IS_AUTOINCREMENT", oIsAutoincrement);
+
 						try{
-							String oIsGeneratedcolumn = rsColumns.getString("IS_GENERATEDCOLUMN");	
+							String oIsGeneratedcolumn = rsColumns.getString("IS_GENERATEDCOLUMN");
+							c.getProperties().put("IS_GENERATEDCOLUMN", oIsGeneratedcolumn);
 						}catch(SQLException e){
 							L.error("SQL Exception",e);
-						}
+						}						
+						
+						// c.setTypeCode(oDataType);
 						
 						
-						c.setTypeCode(oDataType);
-						c.setType(SqlDataType.forCode(oDataType).name());						
+												
 					}
 					
 					// ResultSet rsColumns = databaseMetaData.getColumns(getCatalog(), getSchema(), getTable(), getColumn());

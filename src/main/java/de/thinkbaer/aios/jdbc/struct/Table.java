@@ -1,7 +1,9 @@
 package de.thinkbaer.aios.jdbc.struct;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Table {
 
@@ -14,6 +16,8 @@ public class Table {
 	private String type;
 
 	private List<Column> columns = new ArrayList<>();
+	
+	private Map<String,Object> properties = new HashMap<>();
 	
 	
 	public boolean hasColumn(String name) {
@@ -83,6 +87,16 @@ public class Table {
 		c.setName(columnName);
 		getColumns().add(c);
 		return c;
+	}
+
+
+	public Map<String,Object> getProperties() {
+		return properties;
+	}
+
+
+	public void setProperties(Map<String,Object> properties) {
+		this.properties = properties;
 	}
 	
 }
