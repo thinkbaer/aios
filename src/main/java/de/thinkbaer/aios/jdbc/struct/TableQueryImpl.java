@@ -30,7 +30,7 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 
 	private String column = null;
 
-	private boolean skipKeys = false;
+	private boolean skipColumns = true;
 
 	@Override
 	public TableResultsImpl execute(ConnectionImpl conn) throws Exception {
@@ -42,7 +42,7 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 		} else {
 
 		}
-		boolean attachKeys = skipKeys;
+		boolean attachKeys = !this.isSkipColumns();
 		 if(!attachKeys && getTable() != null){
 			 attachKeys = true;
 		 }
@@ -278,12 +278,12 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 		this.table = table;
 	}
 
-	public boolean isSkipKeys() {
-		return skipKeys;
+	public boolean isSkipColumns() {
+		return this.skipColumns;
 	}
 
-	public void setSkipKeys(boolean skipKeys) {
-		this.skipKeys = skipKeys;
+	public void setSkipColumns(boolean skipColumns) {
+		this.skipColumns = skipColumns;
 	}
 
 	public String[] getTypes() {

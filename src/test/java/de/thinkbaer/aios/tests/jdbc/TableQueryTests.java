@@ -36,7 +36,7 @@ public class TableQueryTests extends AbstractQueryTests {
 
 		TableQueryImpl query = new TableQueryImpl();
 		query.schema("PUBLIC");
-		query.setSkipKeys(true);
+		query.setSkipColumns(true);
 		// query.sql("SELECT * FROM car");
 		Connection connection = ds.connection();
 		QueryResults results = connection.query(query);
