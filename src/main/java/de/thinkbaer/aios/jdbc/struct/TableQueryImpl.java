@@ -115,7 +115,7 @@ public class TableQueryImpl extends AbstractQueryImpl<TableResultsImpl, TableQue
 						short oSourceDataType = rsColumns.getShort("SOURCE_DATA_TYPE");
 						String oIsAutoincrement = rsColumns.getString("IS_AUTOINCREMENT");
 						
-						if(oTypeName == "SERIAL"){
+						if(oTypeName.contentEquals("SERIAL")){
 							c.isPrimary(true);
 						}
 
