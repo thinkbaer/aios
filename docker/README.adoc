@@ -1,0 +1,21 @@
+= Notes
+
+```
+docker build -t aios:0.2.0 .
+```
+
+```
+docker run -i -t aios:0.2.0 /bin/bash
+```
+
+Remove all container from image
+
+```
+docker ps -a | awk '{ print $1,$2 }' | grep aios:0.1.0 | awk '{print $1 }' | xargs -I {} docker rm {}
+```
+
+Remove unused images
+
+```
+docker images -q |xargs docker rmi
+```

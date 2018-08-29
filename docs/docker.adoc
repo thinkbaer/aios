@@ -1,0 +1,10 @@
+
+
+```
+docker build -t aios:0.2.0 .
+```
+
+
+```
+docker run -i -t aios:0.2.0 /bin/bash
+```
