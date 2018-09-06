@@ -20,10 +20,11 @@ public abstract class AbstractQueryImpl<X extends QueryResults, Y extends Abstra
 		return tryAcquireStatement(connection, 5, 500);		
 	}
 	
+	
 	public Statement tryAcquireStatement(ConnectionImpl connection, int retry, int sleep) throws Exception{
 		Statement stat = null;
 		try{
-			stat = connection.getConnection().createStatement();
+			stat = connection.getConnection().createStatement();			
 		}catch(Exception e){
 			if(retry > 0){
 			    L.warn("tryAcquireStatement problem: " + e.getMessage() + " Retry: " + retry);
@@ -35,8 +36,7 @@ public abstract class AbstractQueryImpl<X extends QueryResults, Y extends Abstra
 				throw e;
 			}
 		}
-		return stat;
-		
+		return stat;	
 	}
 
 

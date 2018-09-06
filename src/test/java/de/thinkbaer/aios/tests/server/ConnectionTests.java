@@ -24,6 +24,7 @@ import de.thinkbaer.aios.server.Server;
 
 public class ConnectionTests {
 
+
 	private static final Logger L = LogManager.getLogger( ConnectionTests.class );
 	
 	private static Server server;
@@ -76,7 +77,9 @@ public class ConnectionTests {
 	@AfterClass
 	public static void end(){
 		try {
-			server.shutdown();			
+			if(server != null) {
+				server.shutdown();	
+			}						
 			Thread.sleep(1000);
 		} catch (Exception e) {
 			L.throwing(e);

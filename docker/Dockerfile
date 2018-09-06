@@ -1,20 +1,31 @@
-FROM debian:strech-slim
+FROM debian:stretch-slim
+
+MAINTAINER Robert Kania<cezaryrk@yahoo.de>
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
-# add webupd8 repository
-RUN \
+RUN apt-get update -qq && \
+    apt-get install -q -y apt-utils gnupg curl man && \
+    \
+    \
     echo "===> add webupd8 repository..."  && \
     echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list  && \
     echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list  && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886  && \
-    apt-get update  && \
+    apt-get update -qq && \
     \
     \
     echo "===> install Java & Git & Maven"  && \
     echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections  && \
     echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections  && \
-    DEBIAN_FRONTEND=noninteractive  apt-get install -y --force-yes \
+    set -ex; \
+    \
+    # deal with slim variants not having man page directories (which causes "update-alternatives" to fail)
+    if [ ! -d /usr/share/man/man1 ]; then \
+    	mkdir -p /usr/share/man/man1; \
+    fi; \
+    \
+    DEBIAN_FRONTEND=noninteractive  apt-get install -y -q \
         oracle-java8-installer \
         oracle-java8-set-default \
         git \
@@ -40,7 +51,7 @@ RUN \
     \
     \
     echo "===> clean up..." && \
-    apt-get remove  -y --purge maven git && \
+    apt-get remove  -y --purge maven git curl gnupg man && \
     apt-get autoremove -y --purge  && \
     apt-get -y autoclean && \
     rm -rf /var/lib/apt/lists/* && \
@@ -68,8 +79,6 @@ RUN \
 
 COPY driver/* /data/java/driver/
 COPY ./docker-entrypoint.sh /
-
-# COPY ./log4j2.xml /opt/aios-dist/
 
 EXPOSE 8118
 

@@ -19,10 +19,11 @@ public class ExecuteQueryImpl extends AbstractSqlQueryImpl<ExecuteResultsImpl,Ex
 		Statement stmt = null;
 		try {
 			stmt = tryAcquireStatement(conn);
-			boolean okay = stmt.execute(getSql());
-			results.status(okay);
-			if(okay){
-				ResultSet rs = stmt.getResultSet();				
+			boolean hasResultSet = stmt.execute(getSql(),Statement.RETURN_GENERATED_KEYS);
+			results.status(hasResultSet);
+			
+			if(hasResultSet){
+				ResultSet rs = stmt.getResultSet();							
 				while (rs.next()) {
 					DataSetImpl dset = new DataSetImpl(rs);
 					results.push(dset);
@@ -30,6 +31,11 @@ public class ExecuteQueryImpl extends AbstractSqlQueryImpl<ExecuteResultsImpl,Ex
 				rs.close();
 			}else{
 				results.updateCount(stmt.getUpdateCount());	
+				ResultSet genKeySet = stmt.getGeneratedKeys();
+				while(genKeySet.next()) {
+					DataSetImpl dset = new DataSetImpl(genKeySet);
+					results.push(dset);
+				}
 			}
 		} catch (Exception e) {
 			throw e;

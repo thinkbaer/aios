@@ -1,14 +1,17 @@
 package de.thinkbaer.aios.jdbc.query;
 
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.sql.Clob;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Calendar;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +22,6 @@ import com.ibm.icu.text.CharsetMatch;
 import com.ibm.icu.text.SimpleDateFormat;
 
 import de.thinkbaer.aios.api.exception.Todo;
-import de.thinkbaer.aios.jdbc.ConnectionImpl;
 
 public class DataSetImpl extends LinkedHashMap<String, Object> {
 
@@ -123,9 +125,8 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 						Date d = buildDate(ts3.getTime());
 						String _time = time.format(d);
 						/*
-						 * // Calendar start3 = Calendar.getInstance(); //
-						 * start3.setTime(ts3); // put(columnName,
-						 * start3.getTime()); put(columnName, d);
+						 * // Calendar start3 = Calendar.getInstance(); // start3.setTime(ts3); //
+						 * put(columnName, start3.getTime()); put(columnName, d);
 						 */
 						put(columnName, _time);
 
@@ -145,23 +146,16 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 						put(columnName, null);
 					}
 					break;
-					// TODO: New Types in JDBC 4.2
-					// - TIMESTAMP_WITH_TIMEZONE
-					// - TIME_WITH_TIMEZONE
-					// - REF_CURSOR
-					/*
-				case Types.TIMESTAMP_WITH_TIMEZONE:
-					Timestamp ts = resultSet.getTimestamp(i);
-					if (ts != null) {
-						// Date d = new Date(ts.getTime());
-						// Calendar start = Calendar.getInstance();
-						// start.setTime(ts);
-						put(columnName, buildDate(ts.getTime()));
-					} else {
-						put(columnName, null);
-					}
-					break;
-					*/
+				// TODO: New Types in JDBC 4.2
+				// - TIMESTAMP_WITH_TIMEZONE
+				// - TIME_WITH_TIMEZONE
+				// - REF_CURSOR
+				/*
+				 * case Types.TIMESTAMP_WITH_TIMEZONE: Timestamp ts = resultSet.getTimestamp(i);
+				 * if (ts != null) { // Date d = new Date(ts.getTime()); // Calendar start =
+				 * Calendar.getInstance(); // start.setTime(ts); put(columnName,
+				 * buildDate(ts.getTime())); } else { put(columnName, null); } break;
+				 */
 				case Types.BINARY:
 					// throw new Todo(columnName +":BINARY");
 					// break;
@@ -200,11 +194,14 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 					throw new Todo(columnName + ":STRUCT");
 					// break;
 				case Types.BLOB:
-					throw new Todo(columnName + ":BLOB");
-					// break;
+					java.sql.Blob ablob = resultSet.getBlob(i);
+					String str = new String(ablob.getBytes(1l, (int) ablob.length()));
+					put(columnName, str);
+					break;
 				case Types.CLOB:
-					throw new Todo(columnName + ":CLOB");
-					// break;
+					String clob = clobStringConversion(resultSet.getClob(i));
+					put(columnName, clob);
+					break;
 				case Types.REF:
 					throw new Todo(columnName + ":REF");
 					// break;
@@ -263,4 +260,20 @@ public class DataSetImpl extends LinkedHashMap<String, Object> {
 		colMap.clear();
 		this.clear();
 	}
+
+	public static String clobStringConversion(Clob clb) throws IOException, SQLException {
+		if (clb == null)
+			return "";
+
+		StringBuffer str = new StringBuffer();
+		String strng;
+
+		BufferedReader bufferRead = new BufferedReader(clb.getCharacterStream());
+
+		while ((strng = bufferRead.readLine()) != null)
+			str.append(strng);
+
+		return str.toString();
+	}
+
 }

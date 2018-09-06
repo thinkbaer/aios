@@ -1,6 +1,7 @@
 package de.thinkbaer.aios.jdbc.query;
 
 
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 import de.thinkbaer.aios.api.datasource.query.ModifyQuery;
@@ -25,8 +26,15 @@ public class ExecuteUpdateQueryImpl extends AbstractSqlQueryImpl<ExecuteUpdateRe
 		Statement stmt = null;
 		try {
 			stmt = tryAcquireStatement(conn);
-			int affected = stmt.executeUpdate(getSql());
+			int affected = stmt.executeUpdate(getSql(),Statement.RETURN_GENERATED_KEYS);
 			results.affected(affected);
+			if(affected > 0) {
+				ResultSet genKeySet = stmt.getGeneratedKeys();
+				while(genKeySet.next()) {
+					DataSetImpl dset = new DataSetImpl(genKeySet);
+					results.push(dset);
+				}				
+			}
 		} catch (Exception e) {
 			throw e;
 		} finally {

@@ -19,7 +19,7 @@ import org.junit.rules.TestName;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -131,7 +131,10 @@ public class DataSourceTests {
 		
 		DataSourceQueryRequestBuilder dsqrb = new DataSourceQueryRequestBuilder((ClientImpl) client);
 		SelectQueryImpl query = dsqrb.dsn(desc.getName()).query(SelectQueryImpl.class);
-		String longCond = Strings.repeat(" OR id = 1", 1000);
+		String longCond = "";
+		for(int i=0;i<1000;i++) {
+			longCond += " OR id = 1";
+		}		
 		query.sql("SELECT * FROM car WHERE id = 1 " + longCond);
 
 		DataSourceQueryResponse qResponse = dsqrb.execute().get();
