@@ -18,16 +18,21 @@ CURRENT_DATE=`date +'%Y%m%d'`
 
 
 # Java home
-JDK_DIRS="/usr/lib/jvm/java-8-oracle /usr/lib/jvm/java-8-openjdk /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/java-8-openjdk-armhf /usr/lib/jvm/java-8-openjdk-i386"
+# JDK_DIRS="/usr/lib/jvm/java-8-oracle /usr/lib/jvm/java-8-openjdk /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/java-8-openjdk-armhf /usr/lib/jvm/java-8-openjdk-i386 /usr/local/openjdk-11"
 
-JAVA_HOME=""
-# Look for the right JVM to use
-for jdir in $JDK_DIRS; do
-    if [ -r "$jdir/bin/java" -a -z "${JAVA_HOME}" ]; then
-        JAVA_HOME="$jdir"
-    fi
-done
-export JAVA_HOME
+JAVA=`which java`
+
+if [ -n "$JAVA_HOME" ]; then
+  JAVA_HOME=`dirname $JAVA`
+  JAVA_HOME=`dirname $JAVA_HOME`
+# # Look for the right JVM to use
+# for jdir in $JDK_DIRS; do
+#    if [ -r "$jdir/bin/java" -a -z "${JAVA_HOME}" ]; then
+#        JAVA_HOME="$jdir"
+#    fi
+# done
+  export JAVA_HOME
+fi
 
 checkJava() {
 	if [ -x "$JAVA_HOME/bin/java" ]; then
@@ -78,12 +83,23 @@ do
     fi
 done
 
-JAVA_OPTS=""
-JAVA_OPTS="$JAVA_OPTS -Xms32m"
-JAVA_OPTS="$JAVA_OPTS -Xmx512m"
+JAVA_OPTS="$JAVA_OPTS"
+
+if [ -v $JAVA_XMS ]; then
+    JAVA_OPTS="$JAVA_OPTS -Xms$JAVA_XMS"
+else
+    JAVA_OPTS="$JAVA_OPTS -Xms32m"
+fi
+
+if [ -v $JAVA_XMX ]; then
+    JAVA_OPTS="$JAVA_OPTS -Xmx$JAVA_XMX"
+else
+    JAVA_OPTS="$JAVA_OPTS -Xmx512m"
+fi
+
 JAVA_OPTS="$JAVA_OPTS -XX:+UseParallelGC"
-JAVA_OPTS="$JAVA_OPTS -XX:MaxHeapFreeRatio=75 -XX:MinHeapFreeRatio=25"
-JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError"
+JAVA_OPTS="$JAVA_OPTS -XX:MaxHeapFreeRatio=85 -XX:MinHeapFreeRatio=15"
+JAVA_OPTS="$JAVA_OPTS -XX:-HeapDumpOnOutOfMemoryError"
 JAVA_OPTS="$JAVA_OPTS -Daios.dir=$USER_DIR $SYS_ARGS "
 
 

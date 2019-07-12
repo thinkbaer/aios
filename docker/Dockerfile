@@ -1,18 +1,9 @@
-FROM debian:stretch-slim
+FROM maven:3.6.1-jdk-11
 
 MAINTAINER Robert Kania<cezaryrk@yahoo.de>
 
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
-
 RUN apt-get update -qq && \
     apt-get install -q -y apt-utils gnupg curl man && \
-    \
-    \
-    echo "===> add webupd8 repository..."  && \
-    echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list  && \
-    echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list  && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886  && \
-    apt-get update -qq && \
     \
     \
     echo "===> install Java & Git & Maven"  && \
@@ -24,12 +15,6 @@ RUN apt-get update -qq && \
     if [ ! -d /usr/share/man/man1 ]; then \
     	mkdir -p /usr/share/man/man1; \
     fi; \
-    \
-    DEBIAN_FRONTEND=noninteractive  apt-get install -y -q \
-        oracle-java8-installer \
-        oracle-java8-set-default \
-        git \
-        maven && \
     \
     \
     echo "===> clone Aios from https://github.com/thinkbaer/aios.git"  && \

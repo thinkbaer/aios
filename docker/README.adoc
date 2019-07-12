@@ -1,7 +1,7 @@
 = Notes
 
 ```
-docker build -t aios:0.2.0 .
+docker build -t thinkbaer/aios:0.2.0 .
 ```
 
 ```
