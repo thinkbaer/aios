@@ -85,13 +85,13 @@ done
 
 JAVA_OPTS="$JAVA_OPTS"
 
-if [ -v $JAVA_XMS ]; then
+if [ -n "$JAVA_XMS" ]; then
     JAVA_OPTS="$JAVA_OPTS -Xms$JAVA_XMS"
 else
     JAVA_OPTS="$JAVA_OPTS -Xms32m"
 fi
 
-if [ -v $JAVA_XMX ]; then
+if [ -n "$JAVA_XMX" ]; then
     JAVA_OPTS="$JAVA_OPTS -Xmx$JAVA_XMX"
 else
     JAVA_OPTS="$JAVA_OPTS -Xmx512m"
@@ -104,7 +104,7 @@ fi
 JAVA_OPTS="$JAVA_OPTS -XX:+UseParallelGC"
 JAVA_OPTS="$JAVA_OPTS -XX:MaxHeapFreeRatio=85 -XX:MinHeapFreeRatio=15"
 JAVA_OPTS="$JAVA_OPTS -XX:-HeapDumpOnOutOfMemoryError"
-JAVA_OPTS="$JAVA_OPTS -Xlog4j.configurationFile=$AIOS_CONFIG_FILE"
+JAVA_OPTS="$JAVA_OPTS -Dlog4j.configurationFile=$AIOS_CONFIG_FILE"
 JAVA_OPTS="$JAVA_OPTS -Daios.dir=$USER_DIR $SYS_ARGS "
 
 

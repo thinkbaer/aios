@@ -5,7 +5,6 @@ MAINTAINER Robert Kania<cezaryrk@yahoo.de>
 ENV JAVA_XMS "32m"
 ENV JAVA_XMX "512m"
 
-VOLUME /opt/aios-dist/log4j2.xml
 
 RUN apt-get update -qq && \
     apt-get install -q -y apt-utils gnupg curl man && \
@@ -35,7 +34,7 @@ RUN apt-get update -qq && \
     mvn clean package && \
     \
     \
-    cp -R /opt/aios/build/aios-dist /opt/ && \
+    mv  /opt/aios/build/aios-dist /opt/ && \
     rm -R /opt/aios && \
     chmod +x /opt/aios-dist/bin/*.sh && \
     \
