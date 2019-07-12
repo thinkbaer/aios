@@ -97,9 +97,14 @@ else
     JAVA_OPTS="$JAVA_OPTS -Xmx512m"
 fi
 
+if [ -n "$AIOS_CONFIG_FILE" ]; then
+  AIOS_CONFIG_FILE="/opt/aios-dist/log4j2.xml"
+fi
+
 JAVA_OPTS="$JAVA_OPTS -XX:+UseParallelGC"
 JAVA_OPTS="$JAVA_OPTS -XX:MaxHeapFreeRatio=85 -XX:MinHeapFreeRatio=15"
 JAVA_OPTS="$JAVA_OPTS -XX:-HeapDumpOnOutOfMemoryError"
+JAVA_OPTS="$JAVA_OPTS -Xlog4j.configurationFile=$AIOS_CONFIG_FILE"
 JAVA_OPTS="$JAVA_OPTS -Daios.dir=$USER_DIR $SYS_ARGS "
 
 
