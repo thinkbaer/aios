@@ -1,13 +1,23 @@
-FROM maven:3.6.1-jdk-11
+FROM openjdk:11-jdk-buster
 
 MAINTAINER Robert Kania<cezaryrk@yahoo.de>
 
 ENV JAVA_XMS "32m"
 ENV JAVA_XMX "512m"
 
+ARG MAVEN_VERSION=3.6.3
+ARG USER_HOME_DIR="/root"
+ARG SHA=c35a1803a6e70a126e80b2b3ae33eed961f83ed74d18fcd16909b2d44d7dada3203f1ffe726c17ef8dcca2dcaa9fca676987befeadc9b9f759967a8cb77181c0
+ARG BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
 
 RUN apt-get update -qq && \
-    apt-get install -q -y apt-utils gnupg curl man && \
+    apt-get install -q -y \
+    apt-utils \
+    gnupg \
+    curl \
+    man \
+    procps \
+    && \
     \
     \
     echo "===> install Java & Git & Maven"  && \
@@ -15,6 +25,12 @@ RUN apt-get update -qq && \
     echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections  && \
     set -ex; \
     \
+    mkdir -p /usr/share/maven /usr/share/maven/ref \
+      && curl -fsSL -o /tmp/apache-maven.tar.gz ${BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+      && echo "${SHA}  /tmp/apache-maven.tar.gz" | sha512sum -c - \
+      && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
+      && rm -f /tmp/apache-maven.tar.gz \
+      && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn && \
     # deal with slim variants not having man page directories (which causes "update-alternatives" to fail)
     if [ ! -d /usr/share/man/man1 ]; then \
     	mkdir -p /usr/share/man/man1; \
