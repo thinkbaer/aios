@@ -7,8 +7,8 @@ die () {
 
 dir_resolve()
 {
-    cd "$1" 2>/dev/null || return $?  
-    echo "`pwd -P`" 
+    cd "$1" 2>/dev/null || return $?
+    echo "`pwd -P`"
 }
 
 
@@ -71,7 +71,7 @@ ARGS=""
 
 
 for i in $@
-do    
+do
     if echo "$i" | grep -q "^\-X"; then
 	SYS_ARGS="$SYS_ARGS $i"
     else
@@ -105,6 +105,7 @@ JAVA_OPTS="$JAVA_OPTS -XX:+UseParallelGC"
 JAVA_OPTS="$JAVA_OPTS -XX:MaxHeapFreeRatio=85 -XX:MinHeapFreeRatio=15"
 JAVA_OPTS="$JAVA_OPTS -XX:-HeapDumpOnOutOfMemoryError"
 JAVA_OPTS="$JAVA_OPTS -Dlog4j.configurationFile=$AIOS_CONFIG_FILE"
+JAVA_OPTS="$JAVA_OPTS -Dio.netty.eventLoopThreads=8"
 JAVA_OPTS="$JAVA_OPTS -Daios.dir=$USER_DIR $SYS_ARGS "
 
 

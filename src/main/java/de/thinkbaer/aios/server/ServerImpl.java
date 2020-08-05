@@ -64,7 +64,7 @@ public class ServerImpl implements Server, Runnable {
 
 
   public void run() {
-    bossGroup = new NioEventLoopGroup(1);
+    bossGroup = new NioEventLoopGroup();
     workerGroup = new NioEventLoopGroup();
     b = new ServerBootstrap();
     b.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
@@ -76,7 +76,11 @@ public class ServerImpl implements Server, Runnable {
         .channel(NioServerSocketChannel.class)
         .childHandler(initializer);
 
-      channel = b.bind(HOST, PORT).sync().channel().closeFuture();
+      channel = b.bind(HOST, PORT)
+        .sync()
+        .channel()
+        .closeFuture();
+      
       channel.sync();
     } catch (Exception e) {
       L.throwing(e);
