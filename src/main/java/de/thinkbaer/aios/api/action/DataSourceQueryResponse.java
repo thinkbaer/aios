@@ -5,29 +5,28 @@ import de.thinkbaer.aios.api.annotation.TransportSpec;
 import de.thinkbaer.aios.api.datasource.DataSourceSpec;
 import de.thinkbaer.aios.api.datasource.query.QueryResults;
 
-@TransportSpec(ns="ds.query")
+@TransportSpec(ns = "ds.query")
 public class DataSourceQueryResponse extends OperationResponse {
 
-	private String dsn;
-	
-	private QueryResults result;
+  private String dsn;
 
-	public String getDsn() {
-		return dsn;
-	}
+  private QueryResults result;
 
-	public void setDsn(String dsn) {
-		this.dsn = dsn;
-	}
+  public String getDsn() {
+    return dsn;
+  }
 
-	public QueryResults getResult() {
-		return result;
-	}
+  public void setDsn(String dsn) {
+    this.dsn = dsn;
+  }
 
-	public void setResult(QueryResults result) {
-		this.result = result;
-	}
+  public QueryResults getResult() {
+    return result;
+  }
 
-	
+  public void setResult(QueryResults result) {
+    this.result = result;
+  }
+
 
 }

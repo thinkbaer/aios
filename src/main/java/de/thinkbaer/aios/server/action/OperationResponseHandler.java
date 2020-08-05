@@ -6,45 +6,48 @@ import de.thinkbaer.aios.api.action.support.OperationRequest;
 import de.thinkbaer.aios.api.action.support.OperationResponse;
 
 
-
 public abstract class OperationResponseHandler<Request extends OperationRequest, Response extends OperationResponse, ResponseBuilder extends OperationResponseHandler> {
 
-	protected Request request;
-	
-	private int requestId = 0;
+  protected Request request;
 
-    protected Channel channel;
+  private int requestId = 0;
 
-
-	public void initialize(Channel chc, OperationRequest req) {
-        this.channel = chc;
-        this.request = (Request)req;
-        this.setRequestId(request.getSpec().getRid());        
-	}
-    
-    public Request request(){
-    	return request;
-    }
-    
-    public abstract void execute();
+  protected Channel channel;
 
 
-	public Request getRequest() {
-		return request;
-	}
+  public void initialize(Channel chc, OperationRequest req) {
+    this.channel = chc;
+    this.request = (Request) req;
+    this.setRequestId(request.getSpec().getRid());
+  }
+
+  public abstract Response createResponse();
+
+  public Request request() {
+    return request;
+  }
 
 
-	public Channel getChannel() {
-		return channel;
-	}
+  public abstract void execute();
 
 
-	public int getRequestId() {
-		return requestId;
-	}
+  public Request getRequest() {
+    return request;
+  }
 
 
-	public void setRequestId(int requestId) {
-		this.requestId = requestId;
-	}
+  public Channel getChannel() {
+    return channel;
+  }
+
+
+  public int getRequestId() {
+    return requestId;
+  }
+
+
+  public void setRequestId(int requestId) {
+    this.requestId = requestId;
+  }
+
 }

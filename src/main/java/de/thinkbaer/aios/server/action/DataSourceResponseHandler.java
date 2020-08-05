@@ -18,15 +18,21 @@ import de.thinkbaer.aios.server.datasource.DataSourceManager;
 public class DataSourceResponseHandler extends OperationResponseHandler<DataSourceRequest, DataSourceResponse, DataSourceResponseHandler> {
 
 	private static final Logger L = LogManager.getLogger( DataSourceResponseHandler.class );
-	
+
 	@Inject
 	private DataSourceManager manager;
 
-	public void execute() {
+  @Override
+  public DataSourceResponse createResponse() {
+    DataSourceResponse response = new DataSourceResponse();
+    response.getSpec().setRid(getRequestId());
+    return response;
+  }
+
+  public void execute() {
 		// TODO create new Response through injector
-		DataSourceResponse response = new DataSourceResponse();
-		response.getSpec().setRid(getRequestId());
-		
+		DataSourceResponse response = this.createResponse();
+
 		if(request().getMethod().contentEquals("register")){
 			// TODO create enum for methods
 			try {
@@ -35,18 +41,18 @@ public class DataSourceResponseHandler extends OperationResponseHandler<DataSour
 			} catch (Exception e) {
 				L.throwing(e);
 				if(e instanceof AiosException){
-					response.addError(((AiosException)e).asErrorMessage());	
+					response.addError(((AiosException)e).asErrorMessage());
 				}else{
 					response.addError(new AiosException(e).asErrorMessage());
 				}
-				
+
 			}
 		}else{
 			response.addError(new ErrorMessage("Method not found"));
 		}
-				
-		getChannel().writeAndFlush(response);		
+
+		getChannel().writeAndFlush(response);
 	}
 
-	
+
 }

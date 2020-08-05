@@ -23,13 +23,13 @@ public class DataSourceQueryRequestBuilder extends OperationRequestBuilder<DataS
 	public <X extends Query<?>> X query(Class<X> cls) throws AiosException{
 		try {
 			request().setQuery(cls.newInstance());
-		} catch (InstantiationException | IllegalAccessException e) {
+		} catch (Exception e) {
 			throw new AiosException(e);
 		}
 		return (X)request().getQuery();
 	}
 
-	
+
 
 
 

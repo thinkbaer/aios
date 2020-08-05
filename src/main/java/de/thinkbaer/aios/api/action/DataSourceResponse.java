@@ -6,30 +6,29 @@ import de.thinkbaer.aios.api.action.support.OperationResponse;
 import de.thinkbaer.aios.api.annotation.TransportSpec;
 import de.thinkbaer.aios.api.datasource.DataSourceSpec;
 
-@TransportSpec(ns="ds")
+@TransportSpec(ns = "ds")
 public class DataSourceResponse extends OperationResponse {
 
-	private String method;
-	
-	@JsonProperty("spec")
-	private DataSourceSpec dataSourceSpec;
+  private String method;
 
-	public String getMethod() {
-		return method;
-	}
+  @JsonProperty("spec")
+  private DataSourceSpec dataSourceSpec;
 
-	public void setMethod(String method) {
-		this.method = method;
-	}
+  public String getMethod() {
+    return method;
+  }
 
-	public DataSourceSpec getDataSourceSpec() {
-		return dataSourceSpec;
-	}
+  public void setMethod(String method) {
+    this.method = method;
+  }
 
-	public void setDataSourceSpec(DataSourceSpec dataSourceSpec) {
-		this.dataSourceSpec = dataSourceSpec;
-	}
-	
-	
+  public DataSourceSpec getDataSourceSpec() {
+    return dataSourceSpec;
+  }
+
+  public void setDataSourceSpec(DataSourceSpec dataSourceSpec) {
+    this.dataSourceSpec = dataSourceSpec;
+  }
+
 
 }

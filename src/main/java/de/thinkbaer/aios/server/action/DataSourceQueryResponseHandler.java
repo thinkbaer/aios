@@ -18,40 +18,46 @@ import de.thinkbaer.aios.api.transport.ErrorMessage;
 import de.thinkbaer.aios.server.annotation.RequestHandler;
 import de.thinkbaer.aios.server.datasource.DataSourceManager;
 
-@RequestHandler(request=DataSourceQueryRequest.class,response=DataSourceQueryResponse.class)
+@RequestHandler(request = DataSourceQueryRequest.class, response = DataSourceQueryResponse.class)
 public class DataSourceQueryResponseHandler extends OperationResponseHandler<DataSourceQueryRequest, DataSourceQueryResponse, DataSourceQueryResponseHandler> {
 
-	private static final Logger L = LogManager.getLogger( DataSourceQueryResponseHandler.class );
-	
-	@Inject
-	private DataSourceManager manager;
+  private static final Logger L = LogManager.getLogger(DataSourceQueryResponseHandler.class);
 
-	public void execute() {
-		DataSourceQueryResponse response = new DataSourceQueryResponse();
-		response.getSpec().setRid(getRequestId());
-		response.setDsn(request().getDsn());
-		
-		// get datasource
-		DataSource dataSource = manager.get(request().getDsn());
-		Connection connection;
-		try {
-			connection = dataSource.connection();
-			QueryResults res = connection.query(request().getQuery());
-			response.setResult(res);
-			connection.close();
-		} catch (Exception | Error e) {
-			L.throwing(e);
-			
-			if(e instanceof AiosException){
-				response.addError(((AiosException)e).asErrorMessage());
-			}else{
-				response.addError(new AiosException(e).asErrorMessage());	
-			}
-			
-		}
+  @Inject
+  private DataSourceManager manager;
 
-		getChannel().writeAndFlush(response);		
-	}
+  @Override
+  public DataSourceQueryResponse createResponse() {
+    DataSourceQueryResponse response = new DataSourceQueryResponse();
+    response.getSpec().setRid(getRequestId());
+    response.setDsn(request().getDsn());
+    return response;
+  }
 
-	
+  public void execute() {
+    DataSourceQueryResponse response = this.createResponse();
+
+
+    try {
+      // get datasource
+      DataSource dataSource = manager.get(request().getDsn());
+      Connection connection;
+      connection = dataSource.connection();
+      QueryResults res = connection.query(request().getQuery());
+      response.setResult(res);
+      connection.close();
+    } catch (Exception | Error e) {
+      L.throwing(e);
+
+      if (e instanceof AiosException) {
+        response.addError(((AiosException) e).asErrorMessage());
+      } else {
+        response.addError(new AiosException(e).asErrorMessage());
+      }
+    }
+
+    getChannel().writeAndFlush(response);
+  }
+
+
 }

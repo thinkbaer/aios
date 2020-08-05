@@ -1,5 +1,6 @@
 package de.thinkbaer.aios.server;
 
+import de.thinkbaer.aios.api.exception.AiosException;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -14,116 +15,73 @@ import de.thinkbaer.aios.api.transport.Transport;
 import de.thinkbaer.aios.server.action.OperationResponseHandler;
 
 public class TransportChannelInboundHandlerImpl extends SimpleChannelInboundHandler<Transport> implements
-		TransportChannelInboundHandler {
+  TransportChannelInboundHandler {
 
-	// private static final Logger L = LogManager.getLogger(
-	// ExchangeChannelInboundHandlerImpl.class );
+  // private static final Logger L = LogManager.getLogger(
+  // ExchangeChannelInboundHandlerImpl.class );
 
-	private Logger L;
+  private Logger L;
 
 
-	
-	@Inject
-	private ResponseHandlerDispatcher dispatcher;
+  @Inject
+  private ResponseHandlerDispatcher dispatcher;
 
-	
-	
-	public TransportChannelInboundHandlerImpl() {
-		super();
-		L = LogManager.getLogger("channel.inbound.server");
-		
-	}
-	
-	/*
-	@Override
-	public boolean acceptInboundMessage(Object msg) throws Exception {
-		boolean accepted = super.acceptInboundMessage(msg);
-		if(accepted){
-			if(msg instanceof Transport){
-				return true;
-			}else if(this.context.contentEquals("client") && msg instanceof Outbound){
-				return true;
-			}else{
-				return false;
-			}
-		}
-		return accepted;
-	}*/
 
-	
-	protected void channelRead0(ChannelHandlerContext ctx, Transport exchange_2) throws Exception {
-		if(exchange_2 instanceof OperationRequest){	
-			OperationResponseHandler<?,?, ?> oph =  dispatcher.inject(ctx.channel(), (OperationRequest)exchange_2);
-			
-			ctx.channel().eventLoop().execute(new Runnable() {				
-				@Override
-				public void run() {
-					oph.execute();								
-				}
-			});
-			
-		}
-		
-		/*
-		
-		ExchangeHandler<?> handler = dispatcher.handlerFor(exchange_2, exchange_2.getClass());
-		if(handler == null){
-			throw new Todo();
-		}
-		
-		handler.prepare();
-		
-		if (handler instanceof Responsive) {
-			// fires response(s)
+  public TransportChannelInboundHandlerImpl() {
+    super(true);
+    L = LogManager.getLogger("channel.inbound.server");
 
-			Responsive responsiveExchange = (Responsive) handler;
-			if (responsiveExchange.hasResponse()) {
+  }
 
-				boolean sync = responsiveExchange.isSync();
 
-				if (handler instanceof MultiResponsive) {
-					MultiResponsive multiResponsiveExchange = (MultiResponsive) handler;
+  protected void channelRead0(ChannelHandlerContext ctx, Transport exchange_2) throws Exception {
+    if (exchange_2 instanceof OperationRequest) {
+      OperationResponseHandler<?, ?, ?> oph = dispatcher.inject(ctx.channel(), (OperationRequest) exchange_2);
 
-					Iterator<Exchange> responses = multiResponsiveExchange.iterator();
+      ctx.channel().eventLoop().execute(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            oph.execute();
+          } catch (Exception e) {
+            L.error("processing error: " + e.getMessage());
+            L.throwing(e);
+            Transport response = oph.createResponse();
+            response.addError(new AiosException(e).asErrorMessage());
+            ctx.channel().writeAndFlush(response);
+          }
+        }
+      });
+    }
 
-					// fires multiple response
-					while (responses.hasNext()) {
-						Exchange response = responses.next();
-						handleResponse(ctx, response, sync);
-					}
-				} else {
-					Exchange response = responsiveExchange.response();
-					handleResponse(ctx, response, sync);
-				}
-			}
-		}
-		
-		handler.finished();
-		*/
-	}
+  }
 
-	private void handleResponse(ChannelHandlerContext ctx, Transport response, boolean sync) throws InterruptedException {
-		ChannelFuture writeFuture = ctx.write(response);
-		if (sync) {
-			writeFuture.sync();
-		}
-		ctx.flush();
-	}
+  private void handleResponse(ChannelHandlerContext ctx, Transport response, boolean sync) throws InterruptedException {
+    try {
+      ChannelFuture writeFuture = ctx.write(response);
+      if (sync) {
+        writeFuture.sync();
+      }
+    } catch (Exception e) {
+      L.throwing(e);
+    }
+    ctx.flush();
+  }
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		L.throwing(cause);
-		L.debug("Channel closed");
-		ctx.close();
-	}
+  @Override
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+    L.throwing(cause);
+    L.debug("Channel closed");
+    ctx.close();
+  }
 
-	@Override
-	public void channelActive(final ChannelHandlerContext ctx) {
-		// Once session is secured, send a greeting and register the channel to
-		// the global channel
-		// list so the channel received the messages from others.
-		L.debug("Channel active");
+  @Override
+  public void channelActive(final ChannelHandlerContext ctx) {
+    // Once session is secured, send a greeting and register the channel to
+    // the global channel
+    // list so the channel received the messages from others.
+    L.debug("Channel active");
 
-	}
+  }
 
 }
