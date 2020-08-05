@@ -4,6 +4,7 @@
 	<groupId>de.thinkbaer</groupId>
 	<artifactId>aios</artifactId>
 	<packaging>jar</packaging>
+  <version>0.6.0</version>
 
 	<!-- Project Information -->
 	<name>aios</name>
@@ -212,6 +213,4 @@
 		</repository>
 
 	</repositories>
-
-	<version>0.4.0</version>
 </project>
