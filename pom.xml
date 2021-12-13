@@ -4,7 +4,7 @@
 	<groupId>de.thinkbaer</groupId>
 	<artifactId>aios</artifactId>
 	<packaging>jar</packaging>
-  <version>0.6.0</version>
+  <version>0.6.1</version>
 
 	<!-- Project Information -->
 	<name>aios</name>
@@ -106,16 +106,18 @@
 			<version>53.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.3</version>
-		</dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.15.0</version>
+    </dependency>
+
 
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-			<version>2.3</version>
+			<version>2.15.0</version>
 		</dependency>
 
 		<dependency>
