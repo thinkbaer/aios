@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-buster
+FROM openjdk:11-jdk-bullseye
 
 MAINTAINER Robert Kania<cezaryrk@yahoo.de>
 
